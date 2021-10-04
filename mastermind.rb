@@ -46,22 +46,26 @@ class Game
     end
 
     def self.play
-        @@round_counter = 0
-        @@correct_choices = 0
-
+       
         input = ''
 
         game_code = Game.code_maker(6,4)
         tester = Game.new
         while input != 'q'.downcase do
-            
+            @@round_counter += 1
             puts "Put in a code."
             input = gets.chomp
              Game.code_breaker_exact(game_code, input.split(''))
-             puts "You have #{@@exact_matches} exact matches!"
-             Game.code_breaker_wrong_position(game_code, input.split(''))
-             puts "You have #{@@correct_choices} correct choices."
+             
+            
              p Game.check_if_present(game_code, input.split(''))
+             puts "You have #{@@exact_matches} exact matches!"
+             puts "You have #{@@correct_choices} correct choices."
+
+             if @@exact_matches == 4
+                win
+                break
+             end
         end
     end
 
@@ -75,12 +79,10 @@ class Game
         end
     end
 
-    def self.code_breaker_wrong_position(secret_code, guess)
-        @@correct_choices = 0
-        secret_code.each { |element| @@correct_choices += 1 if guess.include?(element); }
-    end
+    
 
     def self.check_if_present(array_of_choices, user_input)
+        @@correct_choices = 0
         array_of_choices.each do |element|
             
             Game.choice_eliminated(user_input, element)
@@ -91,10 +93,17 @@ class Game
         new_arr = array_of_choices
         
         if array_of_choices.include?(choice)
+            
           new_arr.slice!(array_of_choices.find_index(choice), 1)
+          @@correct_choices += 1
           puts "#{choice} was eliminated."
         end
         
+      end
+
+      def self.win
+        puts "You won in #{@@round_counter} rounds! Congratulations!"
+        @@round_counter = 0
       end
 
 
