@@ -49,20 +49,26 @@ class Game
        
         input = ''
 
+        # Eventually allow user to choose length and complexity
         game_code = Game.code_maker(6,4)
         tester = Game.new
-        while input != 'q'.downcase do
+        while input != 'q' do
             @@round_counter += 1
             puts "Put in a code."
-            input = gets.chomp
+            input = Game.input_checker(game_code.length)
+
+            if input == 'q'
+                quit
+                break
+            end
+
              Game.code_breaker_exact(game_code, input.split(''))
-             
-            
-             p Game.check_if_present(game_code, input.split(''))
+             Game.check_if_present(game_code, input.split(''))
              puts "You have #{@@exact_matches} exact matches!"
              puts "You have #{@@correct_choices} correct choices."
 
-             if @@exact_matches == 4
+             # Change this to accept variable length
+             if @@exact_matches == game_code.length
                 win
                 break
              end
@@ -96,7 +102,6 @@ class Game
             
           new_arr.slice!(array_of_choices.find_index(choice), 1)
           @@correct_choices += 1
-          puts "#{choice} was eliminated."
         end
         
       end
@@ -110,6 +115,24 @@ class Game
 
       def self.singlular_vs_plural(number)
         return 's' if number == 1
+    end
+
+    
+    def self.input_checker(length)
+        input = ''
+        correct_input = (/^[1-9]{#{length}}$/)
+
+        while !(input.match(correct_input)) 
+            
+            input = gets.chomp.downcase
+            break if input == 'q' || input.match(correct_input)
+            puts "Please enter a number with #{length} digits."
+        end
+        input
+    end
+
+    def self.quit
+        puts "Thanks for playing!"
     end
 
     def clues(secret_code, guess)
@@ -128,18 +151,7 @@ class Player
    end
 end
 
-
-
-
-
-
-
-
-
-
-
-
-
+#Game.input_checker
 Game.play
 
 
