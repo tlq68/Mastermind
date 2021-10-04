@@ -52,9 +52,11 @@ class Game
         # Eventually allow user to choose length and complexity
         game_code = Game.code_maker(6,4)
         tester = Game.new
+
+        p game_code
         while input != 'q' do
             @@round_counter += 1
-            puts "Put in a code."
+            puts "\nPut in a code."
             input = Game.input_checker(game_code.length)
 
             if input == 'q'
@@ -64,8 +66,9 @@ class Game
 
              Game.code_breaker_exact(game_code, input.split(''))
              Game.check_if_present(game_code, input.split(''))
-             puts "You have #{@@exact_matches} exact matches!"
-             puts "You have #{@@correct_choices} correct choices."
+             puts "\nYou have #{@@exact_matches} exact match#{Game.singlular_vs_plural_es(@@exact_matches)}!"
+             puts "You have #{@@correct_choices} correct choice#{Game.singlular_vs_plural_s(@@correct_choices)}."
+             
 
              # Change this to accept variable length
              if @@exact_matches == game_code.length
@@ -107,14 +110,18 @@ class Game
       end
 
       def self.win
-        puts "You won in #{@@round_counter} rounds! Congratulations!"
+        puts "You won in #{@@round_counter} round#{Game.singlular_vs_plural_s(@@round_counter)}! Congratulations!"
         @@round_counter = 0
       end
 
 
 
-      def self.singlular_vs_plural(number)
-        return 's' if number == 1
+      def self.singlular_vs_plural_s(number)
+        return 's' if number != 1
+    end
+
+    def self.singlular_vs_plural_es(number)
+        return 'es' if number != 1
     end
 
     
