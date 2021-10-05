@@ -284,12 +284,49 @@ class Computer
     @@round_counter = 0
     @@exact_matches = 0
     @@correct_choices = 0
-
+    
     include Maker
     include Breaker
 
-    def play
-        puts "I'm playing!"
+    def play(user_input)
+        
+        puts "did it work?"
+        win_game = false
+
+        
+
+        arr = [random_number(6).to_s, random_number(6).to_s, random_number(6).to_s, random_number(6).to_s] 
+        p arr, "This is arr"
+        p user_input, "this is user input"
+        new_arr = []
+       #while win_game == false
+            @@round_counter += 1
+        keep_matches(user_input, arr)
+
+            
+          #  break if arr == user_input
+       #end
+
+        puts "It took you #{@@round_counter} rounds."
+        exit
+    end
+
+    def keep_matches(input_array, guess_array)
+
+        input_array.each_with_index do |element, index|
+            #puts guess_array[guess_array.find_index(element)]
+            if guess_array.include?(element) && element == guess_array[index]
+                puts "#{element} is equal to #{guess_array[index]}."
+            end
+        end
+        # This method will take in an array and check each spot against the user input. If both arrays share a matching number in the same position, the number should be kept in the next iteration. For example: array1 = [1, 2, 3, 3], array2 = [2, 1, 3, 4]. The '3' in the third position should be kept. 
+        #Recursion is necessary.
+        # input_array.each do |element|
+        #   
+        # if input_array == guess_array
+        #   break
+        # else
+        #   keep_matches(new_arr)
     end
 
     
@@ -335,9 +372,14 @@ class PlayGame
     
 end
 
+test_arr = ['1', '2', '3']
+
+
 #Game.input_checker
-taco = PlayGame.new
-p taco.play
+taco = Computer.new
+
+
+p taco.play(['2', '4', '4', '3'])
 #Game.play
 
 
