@@ -193,7 +193,7 @@ module Breaker
              puts "You have #{@@correct_choices} correct choice#{singlular_vs_plural_s(@@correct_choices)}.\n"
              
 
-             # Change this to accept variable length
+             
              if @@exact_matches == game_code.length
                 win
                 play_again
@@ -289,47 +289,40 @@ class Computer
     include Breaker
 
     def play(user_input)
-        
-        puts "did it work?"
-        win_game = false
-
-        
-
-        arr = [random_number(6).to_s, random_number(6).to_s, random_number(6).to_s, random_number(6).to_s] 
-        p arr, "This is arr"
-        p user_input, "this is user input"
-        new_arr = []
-       #while win_game == false
-            @@round_counter += 1
-        keep_matches(user_input, arr)
-
-            
-          #  break if arr == user_input
-       #end
-
-        puts "It took you #{@@round_counter} rounds."
+        computer_guess = [random_number(6).to_s, random_number(6).to_s, random_number(6).to_s, random_number(6).to_s]    
+        keep_matches(user_input, computer_guess)
         exit
     end
 
     def keep_matches(input_array, guess_array)
+        new_arr = guess_array
+        while input_array != guess_array
+            new_round(input_array, guess_array)
+            puts "\nPress 'ENTER' for next guess."
+            next_guess = gets.chomp.downcase
+            quit if next_guess == 'q'
 
-        input_array.each_with_index do |element, index|
-            #puts guess_array[guess_array.find_index(element)]
-            if guess_array.include?(element) && element == guess_array[index]
-                puts "#{element} is equal to #{guess_array[index]}."
+            input_array.each_with_index do |element, index|
+                if guess_array[index] != input_array[index]
+                    guess_array[index] = random_number(6).to_s
+                end
+        
+                if @@round_counter == 100 
+                    puts "Wow. 100 rounds? Really?"
+                    break
+                end
             end
         end
-        # This method will take in an array and check each spot against the user input. If both arrays share a matching number in the same position, the number should be kept in the next iteration. For example: array1 = [1, 2, 3, 3], array2 = [2, 1, 3, 4]. The '3' in the third position should be kept. 
-        #Recursion is necessary.
-        # input_array.each do |element|
-        #   
-        # if input_array == guess_array
-        #   break
-        # else
-        #   keep_matches(new_arr)
+        new_round(input_array, guess_array)
+        puts "It took the computer #{@@round_counter} round#{singlular_vs_plural_s(@@round_counter)} to guess your code."
     end
 
-    
+    def new_round(input, guess)
+        @@round_counter += 1
+        puts "Round #{@@round_counter}"
+        puts "\nYou made the secret code #{input}."
+        puts "The computer has guessed #{guess}."  
+    end
 end
 
 class Player 
@@ -349,8 +342,6 @@ class PlayGame
     @@option1 = true
     @@option2 = false
 
-   
-
     def play
         computer = Computer.new
         player = Player.new
@@ -368,20 +359,13 @@ class PlayGame
         maker.generate_code(6,4)
         breaker.play
     end
-
-    
 end
 
-test_arr = ['1', '2', '3']
-
-
+test_arr = ['2', '4', '4', '3']
 #Game.input_checker
 taco = Computer.new
 
-
-p taco.play(['2', '4', '4', '3'])
+p taco.play(test_arr)
 #Game.play
-
-
 
 
