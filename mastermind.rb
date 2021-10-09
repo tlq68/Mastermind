@@ -30,7 +30,6 @@ module Breaker
         @@exact_matches = 0
         @@correct_choices = 0
         input = ''
-
         game_code = code_maker(6,4)
         
         while input != 'q' do
@@ -43,16 +42,16 @@ module Breaker
                 break
             end
 
-             code_breaker_exact(game_code, input_guess)
-             check_if_present(game_code, input_guess)
-             puts "\nYou have" + " #{@@exact_matches} ".light_yellow + "exact match#{singlular_vs_plural_es(@@exact_matches)}!"
-             puts "You have" + " #{@@correct_choices} ".yellow + "correct choice#{singlular_vs_plural_s(@@correct_choices)}.\n"
+            code_breaker_exact(game_code, input_guess)
+            check_if_present(game_code, input_guess)
+            puts "\nYou have" + " #{@@exact_matches} ".light_yellow + "exact match#{singlular_vs_plural_es(@@exact_matches)}!"
+            puts "You have" + " #{@@correct_choices} ".yellow + "correct choice#{singlular_vs_plural_s(@@correct_choices)}.\n"
             
-             if @@exact_matches == game_code.length
+            if @@exact_matches == game_code.length
                 win
                 play_again
                 break
-             end
+            end
         end
     end
 
@@ -81,14 +80,14 @@ module Breaker
           new_arr.slice!(array_of_choices.find_index(choice), 1)
           @@correct_choices += 1
         end
-      end
+    end
 
-      def win
+    def win
         puts "\nYou won in" + " #{@@round_counter} round#{singlular_vs_plural_s(@@round_counter)}! ".light_yellow + "Congratulations!"
         @@round_counter = 0
-      end
+    end
 
-      def singlular_vs_plural_s(number)
+    def singlular_vs_plural_s(number)
         return 's' if number != 1
     end
 
@@ -145,7 +144,7 @@ class Computer
         @@correct_choices = 0
 
         loop do
-            puts "Set the code that the computer will solve!"
+            puts "\nSet the code that the computer will solve!"
             set_code = gets.chomp.downcase
             quit if set_code == 'q'
 
@@ -155,6 +154,8 @@ class Computer
                 computer_guess = [random_number(6).to_s, random_number(6).to_s, random_number(6).to_s, random_number(6).to_s]    
                 keep_matches(user_input, computer_guess)
                 play_again
+            else
+                puts "\nEnter a 4 digit number (1-9).".light_yellow, "Example: 1234".light_red
             end
         end
         exit
@@ -182,7 +183,7 @@ class Computer
             end
         end
         new_round(input_array, guess_array)
-        puts "It took the computer #{@@round_counter} round#{singlular_vs_plural_s(@@round_counter)} to guess your code."
+        puts "\nIt took the computer" + " #{@@round_counter} round#{singlular_vs_plural_s(@@round_counter)} ".light_yellow + "to guess your code."
     end
 
     def new_round(input, guess)
