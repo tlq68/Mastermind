@@ -186,7 +186,7 @@ class Computer
         puts "\nIt took the computer" + " #{@@round_counter} round#{singlular_vs_plural_s(@@round_counter)} ".light_yellow + "to guess your code."
     end
 
-    def new_round(input, guess)
+    def new_round(input, guess) 
         @@round_counter += 1
         puts "\nRound #{@@round_counter}".light_yellow
         puts "\nYou made the secret code.", "#{input}".light_blue
@@ -239,13 +239,15 @@ class PlayGame
 
     def introduction
         puts "\nWelcome to mastermind. You can either be the code maker or the code breaker.".light_yellow
-        puts "\nExample:"
+        puts "---------------------------------------------------"
+        puts "Example:"
         puts "\nThe" + " MAKER ".light_blue+ "creates the code:" + " [\"2\", \"3\", \"4\", \"4\"]".light_blue
         puts "And the" + " BREAKER ".green + "guesses:" + " [\"1\", \"2\", \"3\", \"4\"]".green
         puts "\nThe" + " BREAKER ".green + "will receive the following hint:"
         puts "You have" + " 1 ".light_yellow + "exact match!"
         puts "You have" + " 3 ".yellow + "correct choices."
         puts "\nBecause the" + " BREAKER ".green + "correctly chose 3 numbers and has", "1 number in the correct position."
+        puts "---------------------------------------------------"
     end
 
     def mode(maker, breaker)
