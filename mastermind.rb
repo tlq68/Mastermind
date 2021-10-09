@@ -269,12 +269,18 @@ module Breaker
     end
 
     def play_again
-        puts "\nDo you want to play again?"
-        input = gets.chomp
-        if input == 'y'
-            play
-        else 
-            exit
+        while true
+            puts "\nDo you want to play again? (Y/N)"
+            input = gets.chomp.downcase
+
+            case(input)
+            when 'y'
+                game = PlayGame.new
+                game.play
+            when 'n'
+                exit
+            end
+            quit if input == 'q'
         end
     end
 
@@ -288,11 +294,27 @@ class Computer
     include Maker
     include Breaker
 
-    def play(user_input)
-        computer_guess = [random_number(6).to_s, random_number(6).to_s, random_number(6).to_s, random_number(6).to_s]    
-        keep_matches(user_input, computer_guess)
+    def play
+        
+        loop do
+            puts "Set the code that the computer will solve!"
+
+
+        set_code = gets.chomp.downcase
+
+            quit if set_code == 'q'
+
+            if set_code.match((/^[1-9]{4}$/))
+                user_input = set_code.split('')
+                p user_input
+                computer_guess = [random_number(6).to_s, random_number(6).to_s, random_number(6).to_s, random_number(6).to_s]    
+                keep_matches(user_input, computer_guess)
+                play_again
+            end
+           
+        end
         exit
-    end
+     end
 
     def keep_matches(input_array, guess_array)
         new_arr = guess_array
@@ -339,20 +361,32 @@ class PlayGame
     @@exact_matches = 0
     @@correct_choices = 0
 
-    @@option1 = true
-    @@option2 = false
+    
 
     def play
         computer = Computer.new
         player = Player.new
 
-        if @@option1 == true
-            mode(computer, player)
-        elsif @@option2 == true 
-            mode(player, computer)
-        else
-            "Try another input."
+
+        while true
+            puts "\nEnter '1' to be the code MAKER."
+            puts "Enter '2' to be the code BREAKER."
+            puts "Enter 'q' to exit."
+            option = gets.chomp.downcase                
+        
+            case(option)
+            when "1"
+                mode(player, computer)
+            when "2"
+                mode(computer, player)
+            when "q"
+                exit
+            else
+                puts "\nPlease enter a valid option."
+            end
         end
+
+        
     end
 
     def mode(maker, breaker)
@@ -365,7 +399,9 @@ test_arr = ['2', '4', '4', '3']
 #Game.input_checker
 taco = Computer.new
 
-p taco.play(test_arr)
+#p taco.play(test_arr)
 #Game.play
 
+game = PlayGame.new
 
+game.play
